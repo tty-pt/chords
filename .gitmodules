@@ -1,0 +1,3 @@
+[submodule "src/transpose"]
+	path = src/transpose
+	url = git@github.com:tty-pt/transpose.git
