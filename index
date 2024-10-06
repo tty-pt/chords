@@ -10,11 +10,11 @@ if test ! -z "$HTTP_PARAM_b"; then
 	susv=""
 fi
 
-i18ni="l"
+i18ni="🏛️"
 i18nv="1"
 if test ! -z "$HTTP_PARAM_l"; then
 	flags="$flags -l"
-	i18ni="e"
+	i18ni="🔠"
 	i18nv=""
 fi
 
