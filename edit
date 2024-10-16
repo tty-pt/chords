@@ -1,0 +1,29 @@
+#!/bin/sh
+
+im $OWNER || Forbidden
+
+if test $REQUEST_METHOD = POST; then
+	echo IID $iid >&2
+	qhash -d"$iid" items/assoc.db > /dev/null
+	cat /tmp/mpfd/type | while read type; do
+		test ! -z "$type" || continue
+		echo "-p '$iid:$type'"
+	done | xargs -I {} qhash -a items/types.db {} items/assoc.db > /dev/null
+	cp /tmp/mpfd/type $ITEM_PATH/type
+	fd data > $ITEM_PATH/data.txt
+	fd type > $ITEM_PATH/type
+	SeeOther .
+fi
+
+cat <<!
+<form action='.' method='POST' class='p sf f v' enctype='multipart/form-data'>
+<textarea name='data' class='c8' style='height: 60vh; white-space: pre;'>
+`cat $ITEM_PATH/data.txt`
+</textarea>
+
+<textarea name='type' class='c8' style='height: 13vh; white-space: pre;'>
+`cat $ITEM_PATH/type`
+</textarea>
+
+<button>`_ Submit`</button>
+!
