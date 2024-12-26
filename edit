@@ -3,16 +3,18 @@
 im $OWNER || Forbidden
 
 if test $REQUEST_METHOD = POST; then
-	echo IID $iid >&2
-	qhash -d"$iid" items/assoc.db > /dev/null
-	cat /tmp/mpfd/type | while read type; do
+	item_id="`test -L items/$iid && readlink items/$iid || echo $iid`"
+	qhash -d"$item_id" items/assoc.db > /dev/null
+	fd type | tee $ITEM_PATH/type | while read type; do
 		test ! -z "$type" || continue
-		echo "-p '$iid:$type'"
-	done | xargs -I {} qhash -a items/types.db {} items/assoc.db > /dev/null
-	cp /tmp/mpfd/type $ITEM_PATH/type
+		typeid="`qhash -g "$type" items/types.db | awk '{print $1}'`"
+		if test -z "$typeid"; then
+			typeid="`qhash -p "$type" items/types.db`"
+		fi
+		echo "-p\"$item_id:$typeid\""
+	done | xargs -I {} qhash -m1 {} items/assoc.db > /dev/null
 	fd data > $ITEM_PATH/data.txt
-	fd type > $ITEM_PATH/type
-	SeeOther .
+	SeeOther ../
 fi
 
 cat <<!
