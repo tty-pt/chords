@@ -4,10 +4,23 @@ test -z "$HTTP_PARAM_t" && HTTP_PARAM_t=0 || true
 
 susi="b"
 susv="1"
+flags=""
 if test ! -z "$HTTP_PARAM_b"; then
 	flags="-b"
 	susi="#"
 	susv=""
+fi
+
+if test ! -z "$HTTP_PARAM_r"; then
+	flags="$flags -B"
+fi
+
+comi="⊘"
+comv=""
+if test -z "$HTTP_PARAM_c"; then
+	flags="$flags -c"
+	comi="%"
+	comv="1"
 fi
 
 i18ni="🏛️"
@@ -22,10 +35,11 @@ _TITLE="`cat "$ITEM_PATH/data.txt" | head -n 1`"
 
 plus="`math $HTTP_PARAM_t + 1`"
 minus="`math $HTTP_PARAM_t - 1`"
-Functions "+ t=$plus&b=$HTTP_PARAM_b&l=$HTTP_PARAM_l" \
-	"- t=$minus&b=$HTTP_PARAM_b&l=$HTTP_PARAM_l" \
-	"$susi t=$HTTP_PARAM_t&b=$susv&l=$HTTP_PARAM_l" \
-	"$i18ni t=$HTTP_PARAM_t&b=$HTTP_PARAM_b&l=$i18nv"
+Functions "+ t=$plus&b=$HTTP_PARAM_b&l=$HTTP_PARAM_l&c=$HTTP_PARAM_c" \
+	"- t=$minus&b=$HTTP_PARAM_b&l=$HTTP_PARAM_l&c=$HTTP_PARAM_c" \
+	"$susi t=$HTTP_PARAM_t&b=$susv&l=$HTTP_PARAM_l&c=$HTTP_PARAM_c" \
+	"$i18ni t=$HTTP_PARAM_t&b=$HTTP_PARAM_b&c=$HTTP_PARAM_c&l=$i18nv" \
+	"$comi t=$HTTP_PARAM_t&b=$HTTP_PARAM_b&l=$HTTP_PARAM_l&h=$comv"
 
 cat - <<!
 <pre class='v0 chords'>

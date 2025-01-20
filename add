@@ -1,4 +1,4 @@
 #!/bin/sh
 
-touch $ITEM_PATH/types
+touch $ITEM_PATH/type
 touch $ITEM_PATH/data.txt
