@@ -1,48 +1,46 @@
 #!/bin/sh
 
-test -z "$HTTP_PARAM_t" && HTTP_PARAM_t=0 || true
+test ! -z "$HTTP_PARAM_t" || HTTP_PARAM_t=0
 
-susi="b"
-susv="1"
-flags=""
-if test ! -z "$HTTP_PARAM_b"; then
-	flags="-b"
-	susi="#"
-	susv=""
+flags="-c"
+if test -z "$HTTP_PARAM_b"; then
+	buttons="$buttons`QB 🅱️ b 1`"
+else
+	flags="$flags -b"
+	buttons="$buttons`QB "#️⃣" b`"
 fi
 
-if test ! -z "$HTTP_PARAM_r"; then
-	flags="$flags -B"
-fi
+test -z "$HTTP_PARAM_r" || flags="$flags -B"
 
-comi="⊘"
-comv=""
-if test -z "$HTTP_PARAM_c"; then
-	flags="$flags -c"
-	comi="%"
-	comv="1"
-fi
-
-i18ni="🏛️"
-i18nv="1"
-if test ! -z "$HTTP_PARAM_l"; then
+if test -z "$HTTP_PARAM_l"; then
+	buttons="$buttons`QB 🏛️ l 1`"
+else
 	flags="$flags -l"
-	i18ni="🔠"
-	i18nv=""
+	buttons="$buttons`QB 🔠 l`"
 fi
 
-_TITLE="`cat "$ITEM_PATH/data.txt" | head -n 1`"
+_TITLE="`cat data.txt | head -n 1`"
 
-plus="`math $HTTP_PARAM_t + 1`"
-minus="`math $HTTP_PARAM_t - 1`"
-Functions "+ t=$plus&b=$HTTP_PARAM_b&l=$HTTP_PARAM_l&c=$HTTP_PARAM_c" \
-	"- t=$minus&b=$HTTP_PARAM_b&l=$HTTP_PARAM_l&c=$HTTP_PARAM_c" \
-	"$susi t=$HTTP_PARAM_t&b=$susv&l=$HTTP_PARAM_l&c=$HTTP_PARAM_c" \
-	"$i18ni t=$HTTP_PARAM_t&b=$HTTP_PARAM_b&c=$HTTP_PARAM_c&l=$i18nv" \
-	"$comi t=$HTTP_PARAM_t&b=$HTTP_PARAM_b&l=$HTTP_PARAM_l&h=$comv"
+buttons="$buttons`echo "<input name='t' type='number' step='1' value='$HTTP_PARAM_t'></input>" | FB "🎚️" "" "GET" "t"`"
+
+if is_main; then
+	im $OWNER || buttons="$buttons`IFB "🔱" "$DOCUMENT_URI/fork"`"
+else
+	buttons="$buttons`RB "🔍" "$DOCUMENT_URI/diff"`"
+	im $ORIG_OWNER && buttons="$buttons`IFB "🟣" "$DOCUMENT_URI/merge"`"
+fi
+
+echo "$buttons" >> $DOCUMENT_ROOT/tmp/fun
+yt="`zcat yt`"
+test -z "$yt" || \
+	printf "\n<iframe src='https://www.youtube.com/embed/$yt' frameborder='0'></iframe>"
 
 cat - <<!
 <pre class='v0 chords'>
-`cat $ITEM_PATH/data.txt | tail -n +3 | transp -t $HTTP_PARAM_t -h $flags`
+`cat data.txt | tail -n +3 | transp -t $HTTP_PARAM_t -h $flags`
+</pre>
+<b>`_ Types`</b>
+<pre>
+`cat type`
 </pre>
 !

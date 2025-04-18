@@ -1,0 +1,7 @@
+#!/bin/sh
+MustPost
+set -- `echo $DOCUMENT_URI | tr '/' ' '`
+shift
+cp data.txt type $DOCUMENT_ROOT/items/$1/items/$2/
+reindex $1 $2
+SeeOther /$1/$2

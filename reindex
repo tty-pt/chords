@@ -1,0 +1,12 @@
+#!/bin/sh
+iid=$1
+item_id="`test -L ../$iid && readlink ../$iid || echo $iid`"
+qhash -d"$item_id" ../assoc.db > /dev/null
+cat type | while read type; do
+	test ! -z "$type" || continue
+	typeid="`qhash -g "$type" ../types.db | awk '{print $1}'`"
+	if test -z "$typeid"; then
+		typeid="`qhash -p "$type" ../types.db`"
+	fi
+	echo "-p\"$item_id:$typeid\""
+done | xargs -I {} qhash -m1 {} ../assoc.db > /dev/null

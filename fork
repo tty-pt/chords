@@ -1,0 +1,8 @@
+#!/bin/sh
+MustPost
+HOME=$DOCUMENT_ROOT/home/$REMOTE_USER/
+mkdir -p $HOME/.items/chords/ || true
+cp -rf $DOCUMENT_ROOT/items/chords/items/$iid \
+	   $HOME/.items/chords/ || true
+rm $HOME/.items/chords/$iid/.owner || true
+SeeOther /$REMOTE_USER/chords/$iid

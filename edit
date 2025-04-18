@@ -3,29 +3,26 @@
 im $OWNER || Forbidden
 
 if test $REQUEST_METHOD = POST; then
-	item_id="`test -L items/$iid && readlink items/$iid || echo $iid`"
-	qhash -d"$item_id" items/assoc.db > /dev/null
-	fd type | tee $ITEM_PATH/type | while read type; do
-		test ! -z "$type" || continue
-		typeid="`qhash -g "$type" items/types.db | awk '{print $1}'`"
-		if test -z "$typeid"; then
-			typeid="`qhash -p "$type" items/types.db`"
-		fi
-		echo "-p\"$item_id:$typeid\""
-	done | xargs -I {} qhash -m1 {} items/assoc.db > /dev/null
-	fd data > $ITEM_PATH/data.txt
+	fd type > type
+	fd data > data.txt
+	fd yt > yt
+	reindex chords $iid
 	SeeOther ../
 fi
 
 cat <<!
 <form action='.' method='POST' class='p sf f v' enctype='multipart/form-data'>
-<textarea name='data' class='c8' style='height: 60vh; white-space: pre;'>
-`cat $ITEM_PATH/data.txt`
+<textarea name='data' style='height: 60vh; white-space: pre;'>
+`cat data.txt`
 </textarea>
 
-<textarea name='type' class='c8' style='height: 13vh; white-space: pre;'>
-`cat $ITEM_PATH/type`
+<textarea name='type' style='height: 13vh; white-space: pre;'>
+`cat type`
 </textarea>
+
+<label>YouTube
+<input name='yt' value="`cat yt`"></input>
+</label>
 
 <button>`_ Submit`</button>
 !

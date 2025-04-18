@@ -1,0 +1,9 @@
+#!/bin/sh
+cat <<!
+<pre>
+`git diff --no-index $DOCUMENT_ROOT/items/chords/items/$iid/data.txt data.txt`
+`git diff --no-index $DOCUMENT_ROOT/items/chords/items/$iid/type type`
+`git diff --no-index $DOCUMENT_ROOT/items/chords/items/$iid/yt yt`
+`git diff --no-index $DOCUMENT_ROOT/items/chords/items/$iid/title title`
+</pre>
+!
