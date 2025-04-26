@@ -43,4 +43,25 @@ cat - <<!
 <pre>
 `cat type`
 </pre>
+<div id="osmdContainer" class="shf"></div>
+<script src="https://unpkg.com/opensheetmusicdisplay@1.9.0/build/opensheetmusicdisplay.min.js"></script>
+<script>
+  var osmd = new opensheetmusicdisplay.OpenSheetMusicDisplay("osmdContainer");
+  osmd.TransposeCalculator = new opensheetmusicdisplay.TransposeCalculator();
+  osmd.setOptions({
+    backend: "canvas",
+    drawTitle: false,
+    drawingParameters: "compact"
+  });
+  osmd
+    .load("https://tty.pt/$iid.musicxml")
+    .then(
+      function() {
+        osmd.Zoom = 0.7;
+        osmd.Sheet.Transpose = +$HTTP_PARAM_t;
+	osmd.updateGraphic();
+        osmd.render();
+      }
+    );
+</script>
 !

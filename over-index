@@ -1,0 +1,18 @@
+#!/bin/sh
+
+echo "<form class='h f fic'><label class="v0">`_ Type`"
+echo "<select name='type'>"
+echo "<option value='Any'>`_ Any`</option>"
+qhash -l types.db | \
+while read count format; do
+	attr="`test "$format" != "$HTTP_PARAM_type" || echo selected`"
+	echo "<option $attr value='$format'>$format</option>"
+done
+echo "</select></label><button class='s32 p0'>🔍</button></form>"
+
+if test -z "$HTTP_PARAM_type" || test "$HTTP_PARAM_type" = "Any"; then
+	qhash -l index`ilang`.db
+else
+	qhash -x -q types.db -a index`ilang`.db \
+		-rg"$HTTP_PARAM_type" assoc.db | filter_one
+fi | sort -k3 | Buttons 'tsxl cap' . /$typ/
