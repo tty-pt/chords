@@ -1,14 +1,16 @@
 #!/bin/sh
 
+translate() {
+	iconv -f utf-8 -t ascii//TRANSLIT | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9 ]//g' | sed 's/ /_/g'
+}
+
 rm types.db assoc.db
-qhash -l index.db | while read id link flags name; do
-	test -f $id/type || continue
-	cat $id/type | while read type; do
+qhash -l index.db | while read link flags name; do
+	test -f $link/type || continue
+	cat $link/type | while read type; do
 		test ! -z "$type" || continue;
-		typeid="`qhash -g "$type" types.db | awk '{print $1}'`"
-		if test -z "$typeid"; then
-			typeid="`qhash -p "$type" types.db`"
-		fi
-		echo "-p\"$id:$typeid\""
-	done | xargs -I {} qhash -m1 {} assoc.db >/dev/null
+		typeid="`echo $type | translate`"
+		qhash -p "$typeid:$type" types.db:s:s
+		echo "-p\"$link:$typeid\""
+	done | xargs -I {} qhash {} assoc.db:s >/dev/null
 done
