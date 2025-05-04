@@ -5,12 +5,12 @@ translate() {
 }
 
 rm types.db assoc.db
-qhash -l index.db | while read link flags name; do
+qdb -l index.db | while read link flags name; do
 	test -f $link/type || continue
 	cat $link/type | while read type; do
 		test ! -z "$type" || continue;
 		typeid="`echo $type | translate`"
-		qhash -p "$typeid:$type" types.db:s:s
+		qdb -p "$typeid:$type" types.db:s:s
 		echo "-p\"$link:$typeid\""
-	done | xargs -I {} qhash {} assoc.db:s >/dev/null
+	done | xargs -I {} qdb {} assoc.db:s >/dev/null
 done

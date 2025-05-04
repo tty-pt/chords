@@ -3,8 +3,7 @@
 echo "<form class='h f fic'><label class="v0">`_ Type`"
 echo "<select name='type'>"
 echo "<option value='Any'>`_ Any`</option>"
-qhash -l types.db | \
-while read count format; do
+qdb -l types.db | while read count format; do
 	link="`echo $format | translate`"
 	attr="`test "$link" != "$HTTP_PARAM_type" || echo selected`"
 	echo "<option $attr value='$link'>$format</option>"
@@ -12,8 +11,8 @@ done
 echo "</select></label><button class='s32 p0'>🔍</button></form>"
 
 if test -z "$HTTP_PARAM_type" || test "$HTTP_PARAM_type" = "Any"; then
-	qhash -l index`ilang`.db
+	qdb -l index`ilang`.db
 else
-	qhash -x -a index`ilang`.db \
+	qdb -x -a index`ilang`.db \
 		-g"$HTTP_PARAM_type" assoc.db | filter_one
 fi | Buttons 'tsxl cap' . /$typ/
