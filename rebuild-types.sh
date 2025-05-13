@@ -12,5 +12,5 @@ qdb -l index.db | while read link flags name; do
 		typeid="`echo $type | translate`"
 		qdb -p "$typeid:$type" types.db:s:s
 		echo "-p\"$link:$typeid\""
-	done | xargs -I {} qdb {} assoc.db:s >/dev/null
+	done | xargs -I {} qdb {} assoc.db:2s >/dev/null
 done
