@@ -19,9 +19,15 @@ else
 	buttons="$buttons`QB 🔠 l`"
 fi
 
-_TITLE="`cat data.txt | head -n 1`"
+_TITLE="`cat title`"
 
-buttons="$buttons`echo "<input name='t' type='number' step='1' value='$HTTP_PARAM_t'></input>" | FB "🎚️" "" "GET" "t"`"
+. ../../lib
+
+key_form() {
+	key_select $1 $2 | FB "🎚️" "" "GET" "t"
+}
+
+buttons="$buttons`key_form data.txt $HTTP_PARAM_t`"
 
 if is_main; then
 	im $OWNER || buttons="$buttons`IFB "🔱" "$DOCUMENT_URI/fork"`"
@@ -37,7 +43,7 @@ test -z "$yt" || \
 
 cat - <<!
 <pre class='v0 chords'>
-`cat data.txt | tail -n +3 | transp -t $HTTP_PARAM_t -h $flags`
+`cat data.txt | transp -t $HTTP_PARAM_t -h $flags`
 </pre>
 <b>`_ Types`</b>
 <pre>

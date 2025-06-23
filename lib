@@ -1,0 +1,14 @@
+#!/bin/sh
+
+key_options() {
+	cat $1 | transp -st $2 | while read name tra; do
+		test "$tra" = "0" && attr="selected" || attr=""
+		echo "<option $attr value='$tra'>$name</option>"
+	done
+}
+
+key_select() {
+	echo "<select name='t'>"
+	key_options $1 $2
+	echo "</select>"
+}
