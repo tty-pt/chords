@@ -2,6 +2,15 @@
 
 chords_path="$DOCUMENT_ROOT/items/chords/items/"
 
+TB v ▶️  "video" ⏸️ "no video" || show_video=true
+if TB c 🎸 "chords" 🎤 "lyrics" $invert_chords; then
+	flags="$flags -C"
+	nc=1
+else
+	TB l 🏛️ "latin" 🔠 "caged" || flags="$flags -l"
+	TB b 🅱️ "bemol" "#️⃣" "sustain"  || flags="$flags -b"
+fi
+
 key_options() {
 	cat $1 | transp -s | while read name tra; do
 		echo $name $tra >&2

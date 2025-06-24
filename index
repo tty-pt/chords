@@ -2,21 +2,7 @@
 
 test ! -z "$HTTP_PARAM_t" || HTTP_PARAM_t=0
 
-if test -z "$HTTP_PARAM_b"; then
-	buttons="$buttons`QB 🅱️ "bemol" b 1`"
-else
-	flags="$flags -b"
-	buttons="$buttons`QB "#️⃣" "sustain" b`"
-fi
-
 test -z "$HTTP_PARAM_r" || flags="$flags -B"
-
-if test -z "$HTTP_PARAM_l"; then
-	buttons="$buttons`QB 🏛️ "latin" l 1`"
-else
-	flags="$flags -l"
-	buttons="$buttons`QB 🔠 "caged" l`"
-fi
 
 _TITLE="`cat title`"
 
@@ -27,8 +13,7 @@ else
 	im $ORIG_OWNER && buttons="$buttons`IFB "🟣" "$DOCUMENT_URI/merge"`"
 fi
 
-show_video=true
-
+invert_chords=1
 . ../../lib
 
 key_form() {
@@ -36,7 +21,8 @@ key_form() {
 		| FB "🎚️" "tune" "" "GET" "t"
 }
 
-buttons="$buttons`key_form`"
+test ! -z "$HTTP_PARAM_c" || buttons="$buttons`key_form`"
+
 echo "$buttons" >> $DOCUMENT_ROOT/tmp/fun
 
 chords_print $iid $HTTP_PARAM_t "`cat type`"
