@@ -2,53 +2,46 @@
 
 test ! -z "$HTTP_PARAM_t" || HTTP_PARAM_t=0
 
-flags="-c"
 if test -z "$HTTP_PARAM_b"; then
-	buttons="$buttons`QB 🅱️ b 1`"
+	buttons="$buttons`QB 🅱️ "bemol" b 1`"
 else
 	flags="$flags -b"
-	buttons="$buttons`QB "#️⃣" b`"
+	buttons="$buttons`QB "#️⃣" "sustain" b`"
 fi
 
 test -z "$HTTP_PARAM_r" || flags="$flags -B"
 
 if test -z "$HTTP_PARAM_l"; then
-	buttons="$buttons`QB 🏛️ l 1`"
+	buttons="$buttons`QB 🏛️ "latin" l 1`"
 else
 	flags="$flags -l"
-	buttons="$buttons`QB 🔠 l`"
+	buttons="$buttons`QB 🔠 "caged" l`"
 fi
 
 _TITLE="`cat title`"
 
-. ../../lib
-
-key_form() {
-	key_select $1 $2 | FB "🎚️" "" "GET" "t"
-}
-
-buttons="$buttons`key_form data.txt $HTTP_PARAM_t`"
-
 if is_main; then
-	im $OWNER || buttons="$buttons`IFB "🔱" "$DOCUMENT_URI/fork"`"
+	im $OWNER || buttons="$buttons`IFB "🔱" "fork" "$DOCUMENT_URI/fork"`"
 else
-	buttons="$buttons`RB "🔍" "$DOCUMENT_URI/diff"`"
+	buttons="$buttons`RB "🔍" "" "$DOCUMENT_URI/diff"`"
 	im $ORIG_OWNER && buttons="$buttons`IFB "🟣" "$DOCUMENT_URI/merge"`"
 fi
 
+show_video=true
+
+. ../../lib
+
+key_form() {
+	key_select data.txt $HTTP_PARAM_t \
+		| FB "🎚️" "tune" "" "GET" "t"
+}
+
+buttons="$buttons`key_form`"
 echo "$buttons" >> $DOCUMENT_ROOT/tmp/fun
-yt="`zcat yt`"
-test -z "$yt" || \
-	printf "\n<iframe src='https://www.youtube.com/embed/$yt' frameborder='0'></iframe>"
+
+chords_print $iid $HTTP_PARAM_t "`cat type`"
 
 cat - <<!
-<pre class='v0 chords'>
-`cat data.txt | transp -t $HTTP_PARAM_t -h $flags`
-</pre>
-<b>`_ Types`</b>
-<pre>
-`cat type`
-</pre>
 <div id="osmdContainer" class="shf"></div>
 <script src="https://unpkg.com/opensheetmusicdisplay@1.9.0/build/opensheetmusicdisplay.min.js"></script>
 <script>

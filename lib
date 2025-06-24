@@ -1,14 +1,61 @@
 #!/bin/sh
 
+chords_path="$DOCUMENT_ROOT/items/chords/items/"
+
 key_options() {
-	cat $1 | transp -st $2 | while read name tra; do
-		test "$tra" = "0" && attr="selected" || attr=""
+	cat $1 | transp -s | while read name tra; do
+		echo $name $tra >&2
+		test "$tra" = "$2" && attr="selected" || attr=""
 		echo "<option $attr value='$tra'>$name</option>"
 	done
 }
 
 key_select() {
-	echo "<select name='t'>"
-	key_options $1 $2
+	echo "<select name='t' onchange='this.form.submit()'>"
+	key_options $1 $2 $3
 	echo "</select>"
+}
+
+show_video() {
+	local yt="`zcat $1`"
+	test -z "$yt" || \
+		printf "\n<div><iframe src='https://www.youtube.com/embed/$yt' frameborder='0'></iframe></div>"
+}
+
+test -z "$HTTP_PARAM_v" || show_video=show_video
+
+shift_chords() {
+}
+
+# chords_path should be set,
+# flags and counter can be set too
+# alongside show_video
+chords_print() {
+	song=$1
+	t=$2
+	fmt=$3
+	link="`echo $song | awk '{print $1}'`"
+	song_dir="$chords_path/$link"
+	path="$song_dir/data.txt"
+	lypath="$song_dir/data.ly"
+	test -f "$lypath" \
+		&& lyink="<a href='/chords/$link/data.ly'>𝄞</a> " \
+		|| lyink=
+
+	type="<h6>$fmt</h6>"
+
+	echo "<div class='v0 f'>"
+	cat - <<!
+<span id='$counter' class='h f fic'>
+<div class="v0 f fg">
+<h4>$lyink<a href='/chords/$link/'>`cat $chords_path/$link/title`</a></h4>
+$type
+</div>
+`shift_chords $counter $t $song_dir`
+</span>
+`$show_video $song_dir/yt`
+!
+	echo "<pre lang='pt'>"
+	cat "$path" | transp -h $flags -t $t
+	echo "</pre></div>"
 }
