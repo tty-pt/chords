@@ -11,9 +11,34 @@ else
 	TB b 🅱️ "bemol" "#️⃣" "sustain"  || flags="$flags -b"
 fi
 
+test -z "$QUERY_STRING" || SeeOther $DOCUMENT_URI
+
+zoomv="`zcat $DOCUMENT_ROOT/home/$REMOTE_USER/.tty/chords-zoom || echo 1`"
+
+zoom() {
+	cat <<!
+<label>
+<script>
+const main = document.getElementById("main");
+function zoom(value) {
+	main.style.fontSize = "calc(" + value + " * 0.8rem)";
+	fetch("/chords/zoom?v=" + encodeURIComponent(value));
+}
+document.addEventListener("DOMContentLoaded", () => {
+	console.log("Loaded", $zoomv);
+	main.style.fontSize = "calc($zoomv * 0.8rem)";
+});
+</script>
+	<span>`__ zoom`</span>
+	<input type="range" min="0.8" max="1.6" step="0.05" value="$zoomv" onchange="zoom(this.value)"></input>
+</label>
+!
+}
+
+buttons="$buttons`zoom`"
+
 key_options() {
-	cat $1 | transp -s | while read name tra; do
-		echo $name $tra >&2
+	cat $1 | transp $flags -s | while read name tra; do
 		test "$tra" = "$2" && attr="selected" || attr=""
 		echo "<option $attr value='$tra'>$name</option>"
 	done
@@ -31,7 +56,11 @@ show_video() {
 		printf "\n<div><iframe src='https://www.youtube.com/embed/$yt' frameborder='0'></iframe></div>"
 }
 
-test -z "$HTTP_PARAM_v" || show_video=show_video
+ignore() {
+}
+
+test -z "$HTTP_PARAM_v" && show_video=ignore \
+	|| show_video=show_video
 
 shift_chords() {
 }

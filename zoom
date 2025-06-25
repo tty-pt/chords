@@ -1,0 +1,2 @@
+#!/bin/sh
+echo $HTTP_PARAM_v > $DOCUMENT_ROOT/home/$REMOTE_USER/.tty/chords-zoom

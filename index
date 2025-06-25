@@ -25,7 +25,7 @@ test ! -z "$HTTP_PARAM_c" || buttons="$buttons`key_form`"
 
 echo "$buttons" >> $DOCUMENT_ROOT/tmp/fun
 
-chords_print $iid $HTTP_PARAM_t "`cat type`"
+chords_print $iid $HTTP_PARAM_t "`zcat type`"
 
 cat - <<!
 <div id="osmdContainer" class="shf"></div>
