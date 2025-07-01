@@ -7,7 +7,7 @@ test -z "$HTTP_PARAM_r" || flags="$flags -B"
 _TITLE="`cat title`"
 
 if is_main; then
-	im $OWNER || buttons="$buttons`IFB "🔱" "fork" "$DOCUMENT_URI/fork"`"
+	im $OWNER || test -z "$REMOTE_USER" | buttons="$buttons`IFB "🔱" "fork" "$DOCUMENT_URI/fork"`"
 else
 	buttons="$buttons`RB "🔍" "" "$DOCUMENT_URI/diff"`"
 	im $ORIG_OWNER && buttons="$buttons`IFB "🟣" "$DOCUMENT_URI/merge"`"

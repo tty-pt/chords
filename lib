@@ -11,13 +11,15 @@ else
 	TB b 🅱️ "bemol" "#️⃣" "sustain"  || flags="$flags -b"
 fi
 
-test -z "$QUERY_STRING" || SeeOther $DOCUMENT_URI
+test -z "$QUERY_STRING" || test -z "$REMOTE_USER" || SeeOther $DOCUMENT_URI
 
-zoomv="`zcat $DOCUMENT_ROOT/home/$REMOTE_USER/.tty/chords-zoom || echo 1`"
+zoomv="`zcat $DOCUMENT_ROOT/home/$REMOTE_USER/.tty/chords-zoom || echo 0.9`"
 
 zoom() {
 	cat <<!
 <label>
+	<div>`__ zoom`</div>
+	<input type="range" min="0.8" max="1.6" step="0.05" value="$zoomv" onchange="zoom(this.value)"></input>
 <script>
 const main = document.getElementById("main");
 function zoom(value) {
@@ -29,8 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	main.style.fontSize = "calc($zoomv * 0.8rem)";
 });
 </script>
-	<span>`__ zoom`</span>
-	<input type="range" min="0.8" max="1.6" step="0.05" value="$zoomv" onchange="zoom(this.value)"></input>
 </label>
 !
 }

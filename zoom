@@ -1,2 +1,3 @@
 #!/bin/sh
+test ! -z "$REMOTE_USER" || Forbidden
 echo $HTTP_PARAM_v > $DOCUMENT_ROOT/home/$REMOTE_USER/.tty/chords-zoom

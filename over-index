@@ -14,5 +14,5 @@ if test -z "$HTTP_PARAM_type" || test "$HTTP_PARAM_type" = "Any"; then
 	qdb -l index`ilang`.db
 else
 	qdb -x -a index`ilang`.db \
-		-g"$HTTP_PARAM_type" assoc.db | awk '{$2=""; $0=$0; print}'
+		-g"$HTTP_PARAM_type" assoc.db
 fi | Buttons 'tsxl cap' . /$typ/
