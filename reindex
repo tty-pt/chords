@@ -1,8 +1,8 @@
 #!/bin/sh
 link=$1
-qdb -d"$link" ../assoc.db > /dev/null
+$qdb -d"$link" ../assoc.db:s > /dev/null
 cat type | while read type; do
 	test ! -z "$type" || continue
 	typeid="`echo $type | translate`"
 	echo "-p\"$link:$typeid\""
-done | xargs -I {} qdb {} ../assoc.db:s > /dev/null
+done | xargs -I {} $qdb {} ../assoc.db:s > /dev/null

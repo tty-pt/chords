@@ -2,7 +2,18 @@
 
 chords_path="$DOCUMENT_ROOT/items/chords/items/"
 
-TB v ▶️  "video" ⏸️ "no video" || show_video=true
+show_video() {
+	local yt="`zcat $1`"
+	test -z "$yt" || \
+		printf "\n<div><iframe src='https://www.youtube.com/embed/$yt' frameborder='0'></iframe></div>"
+}
+
+ignore() {
+}
+
+show_video=ignore
+TB v ▶️  "video" ⏸️ "no video" || show_video=show_video
+
 if TB c 🎸 "chords" 🎤 "lyrics" $invert_chords; then
 	flags="$flags -C"
 	nc=1
@@ -10,8 +21,6 @@ else
 	TB l 🏛️ "latin" 🔠 "caged" || flags="$flags -l"
 	TB b 🅱️ "bemol" "#️⃣" "sustain"  || flags="$flags -b"
 fi
-
-test -z "$QUERY_STRING" || test -z "$REMOTE_USER" || SeeOther $DOCUMENT_URI
 
 zoomv="`zcat $DOCUMENT_ROOT/home/$REMOTE_USER/.tty/chords-zoom || echo 0.9`"
 
@@ -45,22 +54,14 @@ key_options() {
 }
 
 key_select() {
-	echo "<select name='t' onchange='this.form.submit()'>"
-	key_options $1 $2 $3
+	local name="$3"
+	local onchange=""
+	test ! -z "$4" || onchange="onchange='this.form.submit()'"
+	test ! -z "$name" || name="t"
+	echo "<select name='$name' $onchange>"
+	key_options $1 $2
 	echo "</select>"
 }
-
-show_video() {
-	local yt="`zcat $1`"
-	test -z "$yt" || \
-		printf "\n<div><iframe src='https://www.youtube.com/embed/$yt' frameborder='0'></iframe></div>"
-}
-
-ignore() {
-}
-
-test -z "$HTTP_PARAM_v" && show_video=ignore \
-	|| show_video=show_video
 
 shift_chords() {
 }
