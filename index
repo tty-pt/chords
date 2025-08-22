@@ -23,7 +23,7 @@ key_form() {
 
 test ! -z "$HTTP_PARAM_c" || buttons="$buttons`key_form`"
 
-echo "$buttons" >> $DOCUMENT_ROOT/tmp/fun
+echo "$buttons" >> $fun
 
 chords_print $iid $HTTP_PARAM_t "`zcat type`"
 
@@ -39,7 +39,7 @@ cat - <<!
     drawingParameters: "compact"
   });
   osmd
-    .load("https://tty.pt/$iid.musicxml")
+    .load("$DOCUMENT_URI\score.mxl")
     .then(
       function() {
         osmd.Zoom = 0.7;

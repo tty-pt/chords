@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo "<form class='h f fic'><label class="v0">`_ Type`"
+echo "<form class='h fic'><label class="v0">`_ Type`"
 echo "<select name='type' onchange='this.form.submit()'>"
 echo "<option value='Any'>`_ Any`</option>"
 $qdb -l types.db:s | while read count format; do

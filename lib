@@ -30,12 +30,13 @@ zoom() {
 	<div>`__ zoom`</div>
 	<input type="range" min="0.8" max="1.6" step="0.05" value="$zoomv" onchange="zoom(this.value)"></input>
 <script>
-const main = document.getElementById("main");
+let main = null;
 function zoom(value) {
 	main.style.fontSize = "calc(" + value + " * 0.8rem)";
 	fetch("/chords/zoom?v=" + encodeURIComponent(value));
 }
 document.addEventListener("DOMContentLoaded", () => {
+	main = document.getElementById("main");
 	console.log("Loaded", $zoomv);
 	main.style.fontSize = "calc($zoomv * 0.8rem)";
 });
@@ -83,7 +84,7 @@ chords_print() {
 
 	type="<h6>$fmt</h6>"
 
-	echo "<div class='v0 f'>"
+	echo "<div class='v8 f'>"
 	cat - <<!
 <span id='$counter' class='h f fic'>
 <div class="v0 f fg">
