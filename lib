@@ -1,6 +1,7 @@
 #!/bin/sh
 
 chords_path="$DOCUMENT_ROOT/items/chords/items/"
+transp="$chords_path../src/transp/bin/transp"
 
 show_video() {
 	local yt="`zcat $1`"
@@ -48,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
 buttons="$buttons`zoom`"
 
 key_options() {
-	cat $1 | transp $flags -s | while read name tra; do
+	cat $1 | $transp $flags -s | while read name tra; do
 		test "$tra" = "$2" && attr="selected" || attr=""
 		echo "<option $attr value='$tra'>$name</option>"
 	done
@@ -96,6 +97,6 @@ $type
 `$show_video $song_dir/yt`
 !
 	echo "<pre lang='pt'>"
-	cat "$path" | transp -h $flags -t $t
+	cat "$path" | $transp -h $flags -t $t
 	echo "</pre></div>"
 }
