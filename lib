@@ -2,6 +2,7 @@
 
 chords_path="$DOCUMENT_ROOT/items/chords/items/"
 transp="$chords_path../src/transp/bin/transp"
+flags="$flags -B"
 
 show_video() {
 	local yt="`zcat $1`"
@@ -10,18 +11,13 @@ show_video() {
 }
 
 ignore() {
+	echo ignore >/dev/null
 }
 
 show_video=ignore
 TB v ▶️  "video" ⏸️ "no video" || show_video=show_video
-
-if TB c 🎸 "chords" 🎤 "lyrics" $invert_chords; then
-	flags="$flags -C"
-	nc=1
-else
-	TB l 🏛️ "latin" 🔠 "caged" || flags="$flags -l"
-	TB b 🅱️ "bemol" "#️⃣" "sustain"  || flags="$flags -b"
-fi
+TB l 🏛️ "latin" 🔠 "caged" || flags="$flags -l"
+TB b 🅱️ "bemol" "#️⃣" "sustain"  || flags="$flags -b"
 
 zoomv="`zcat $DOCUMENT_ROOT/home/$REMOTE_USER/.tty/chords-zoom || echo 0.9`"
 
@@ -44,6 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </label>
 !
+
 }
 
 buttons="$buttons`zoom`"
@@ -66,6 +63,7 @@ key_select() {
 }
 
 shift_chords() {
+	echo ignore >/dev/null
 }
 
 # chords_path should be set,

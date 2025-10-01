@@ -3,16 +3,29 @@
 echo "<form class='h fic'><label class="v0">`_ Type`"
 echo "<select name='type' onchange='this.form.submit()'>"
 echo "<option value='Any'>`_ Any`</option>"
-$qdb -l types.db:s | while read count format; do
+$qdb -l types.db | while read count format; do
 	link="`echo $format | translate`"
 	attr="`test "$link" != "$HTTP_PARAM_type" || echo selected`"
 	echo "<option $attr value='$link'>$format</option>"
 done
 echo "</select></label><noscript><button class='round p4'>🔍</button></noscript></form>"
 
-if test -z "$HTTP_PARAM_type" || test "$HTTP_PARAM_type" = "Any"; then
-	$qdb -l index`ilang`.db:s
+cache="$DOCUMENT_ROOT/tmp/cache/chords"
+mkdir -p $cache 2>/dev/null || true
+
+test ! -z "$HTTP_PARAM_type" || HTTP_PARAM_type="any"
+
+cachet="$cache/$HTTP_PARAM_type"
+if test -f $cachet && false; then
+	cat $cachet
+	exit 0
+fi
+
+if test "$HTTP_PARAM_type" = "any"; then
+	echo $qdb -l index`ilang`.db >&2
+	$qdb -l index`ilang`.db
 else
-	$qdb -x -a index`ilang`.db:s \
-		-g"$HTTP_PARAM_type" assoc.db:s
-fi | Buttons 'tsxl cap' . /$typ/
+	cmd="`$qdb -rg"$HTTP_PARAM_type" assoc.db | sed 's/\</-g/g'`"
+	cmd="$qdb -kr $cmd index.db" 
+	$cmd
+fi | Buttons 'tsxl cap' . /$typ/ | tee $cachet

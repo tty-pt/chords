@@ -2,8 +2,6 @@
 
 test ! -z "$HTTP_PARAM_t" || HTTP_PARAM_t=0
 
-test -z "$HTTP_PARAM_r" || flags="$flags -B"
-
 _TITLE="`cat title`"
 
 if is_main; then
@@ -13,7 +11,6 @@ else
 	im $ORIG_OWNER && buttons="$buttons`IFB "🟣" "$DOCUMENT_URI/merge"`"
 fi
 
-invert_chords=1
 . ../../lib
 
 key_form() {
@@ -23,7 +20,7 @@ key_form() {
 
 test ! -z "$HTTP_PARAM_c" || buttons="$buttons`key_form`"
 
-echo "$buttons" >> $fun
+more_fun "$buttons"
 
 chords_print $iid $HTTP_PARAM_t "`zcat type`"
 
@@ -39,7 +36,7 @@ cat - <<!
     drawingParameters: "compact"
   });
   osmd
-    .load("$DOCUMENT_URI\score.mxl")
+    .load("$DOCUMENT_URI/score.mxl")
     .then(
       function() {
         osmd.Zoom = 0.7;
